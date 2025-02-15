@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    # TODO: Remove 'pipeline-setup' branch trigger before merging to master
+    # TODO: Remove 'pipeline-setup' branch trigger before merging to master.
     branches:
       - master
       - pipeline-setup
