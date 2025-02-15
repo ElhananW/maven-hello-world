@@ -22,5 +22,5 @@ jobs:
     - name: Upload JAR artifact
       uses: actions/upload-artifact@v4
       with:
-        name: myapp-jar-${{ env.newVersion }}
-        path: ${{ env.JAR_PATH }}
+        name: myapp-jar
+        path: ./myapp/target/myapp-*
