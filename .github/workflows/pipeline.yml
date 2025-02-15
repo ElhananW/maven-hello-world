@@ -13,14 +13,23 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3  
+      uses: actions/checkout@v4
+
+    - name: Update project version
+      working-directory: ./myapp
+      run: |
+        version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        newVersion=$(echo $version | awk -F'[.-]' '{if (NF == 3) print $1"."$2"."$3+1; else print $1"."$2"."$3+1"-"$4}')
+        echo "newVersion=$newVersion" >> "$GITHUB_ENV"
+        mvn versions:set -DnewVersion=$newVersion
+        echo "Updated version: $newVersion"
 
     - name: Compile Code and Package Artifact
       working-directory: ./myapp
       run: mvn clean package
-
+  
     - name: Upload JAR artifact
       uses: actions/upload-artifact@v4
       with:
-        name: myapp-jar
-        path: ./myapp/target/myapp-*
+        name: myapp-jar-${{ env.newVersion }}
+        path: ./myapp/target/myapp-
