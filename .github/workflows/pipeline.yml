@@ -76,13 +76,8 @@ jobs:
       with:
         image: ${{ secrets.DOCKER_USERNAME }}/myapp:${{ needs.build.outputs.newVersion }}
         options: -p 8080:8080 --name myapp-container
-
-    - name: Verify Container is Running
+       
+    - name: Show Docker logs
       run: |
-        docker ps -a
-        docker start myapp-container  
-        sleep 2 
-        docker logs -f myapp-container
-        docker ps -a
-
-
+        sleep 2  
+        docker logs myapp-container
