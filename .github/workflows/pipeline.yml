@@ -72,7 +72,7 @@ jobs:
     - name: Run Docker container
       uses: addnab/docker-run-action@v3
       with:
-        image: ${{ secrets.DOCKER_USERNAME }}/myapp:${{ needs.build_and_publish_docker.outputs.NEW_VERSION }}
+        image: ${{ secrets.DOCKER_USERNAME }}/myapp:${{ needs.build.outputs.newVersion }}
         options: -p 8080:8080 --name myapp-container
 
     - name: Verify Container is Running
