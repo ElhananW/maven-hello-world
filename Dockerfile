@@ -32,4 +32,4 @@ USER Elhanan
 EXPOSE 8080
 
 # Run the JAR file and keep the container alive
-ENTRYPOINT ["sh", "-c", "java -jar app.jar && tail -f /dev/null"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
