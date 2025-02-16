@@ -1,19 +1,34 @@
-# Use official OpenJDK image as base image
-FROM openjdk:21-jdk-slim
+# Stage 1: Build
+FROM maven:3.9.6-eclipse-temurin-21-alpine AS builder
+
+WORKDIR /app
+
+# Optimize caching by installing dependencies first
+COPY myapp/pom.xml .
+RUN mvn dependency:go-offline
+
+# Copy the rest of the project and build
+COPY myapp/src ./src
+RUN mvn clean package -DskipTests
+
+# Stage 2: Run
+FROM eclipse-temurin:21-jre-alpine AS runtime
 
 # Create a non-root user
-RUN useradd -ms /bin/bash myuser
+RUN addgroup -S appgroup && adduser -S Elhanan -G appgroup
 
-# Set the working directory
-WORKDIR /home/myuser/app
+WORKDIR /home/Elhanan/app
 
-# Copy the JAR file into the container
-COPY myapp/target/*.jar app.jar
+# Copy the JAR from the builder stage
+COPY --from=builder /app/target/*.jar app.jar
 
-# Set the user to the non-root user
-USER myuser
+# Set permissions securely
+RUN chown Elhanan:appgroup app.jar && chmod 755 app.jar
 
-# Expose the port the app will run on
+# Switch to non-root user
+USER Elhanan
+
+# Expose the port
 EXPOSE 8080
 
 # Run the JAR file and keep the container alive
