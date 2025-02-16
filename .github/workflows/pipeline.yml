@@ -37,6 +37,8 @@ jobs:
   build_and_publish_docker:
     runs-on: ubuntu-latest
     needs: build # Make sure this stage runs after the build stage
+    env:
+      TAG_NAME: elhananw 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -56,7 +58,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/myapp:${{ env.newVersion }}
+          tags: ${{ env.TAG_NAME }}/myapp:${{ env.newVersion }}       
 
 
 
