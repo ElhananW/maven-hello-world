@@ -71,13 +71,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Run Docker container
-      uses: addnab/docker-run-action@v3
-      with:
-        image: ${{ secrets.DOCKER_USERNAME }}/myapp:${{ needs.build.outputs.newVersion }}
-        options: -p 8080:8080 --name myapp-container
-       
-    - name: Show Docker logs
+    - name: Pull Docker image
       run: |
-        sleep 2  
-        docker logs myapp-container
+        docker pull ${{ secrets.DOCKER_USERNAME }}/myapp:${{ needs.build.outputs.newVersion }}
+
+    - name: Run Docker container and show logs
+      run: |
+        docker run --name myapp-container -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/myapp:${{ needs.build.outputs.newVersion }} && docker logs -f myapp-container
