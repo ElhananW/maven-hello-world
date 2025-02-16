@@ -77,4 +77,4 @@ jobs:
 
     - name: Run Docker container and show logs
       run: |
-        docker run --name myapp-container -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/myapp:${{ needs.build.outputs.newVersion }} && docker logs -f myapp-container
+        docker run --name myapp-container -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/myapp:${{ needs.build.outputs.newVersion }}
