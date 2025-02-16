@@ -80,5 +80,9 @@ jobs:
     - name: Verify Container is Running
       run: |
         docker ps -a
+        docker start myapp-container  
+        sleep 2 
         docker logs -f myapp-container
+        docker ps -a
+
 
