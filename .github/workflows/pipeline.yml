@@ -47,7 +47,7 @@ jobs:
     - name: Commit and push updated version
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: "Update version to ${{ env.NEW_VERSION }}. [skip ci]"
+        commit_message: "Update version to ${{ steps.newVersionEnv.outputs.NEW_VERSION }}. [skip ci]"
         branch: ${{ github.ref_name }}
 
     - name: Compile Code and Package Artifact
