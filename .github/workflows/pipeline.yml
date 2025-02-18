@@ -161,10 +161,10 @@ jobs:
     steps:
       - name: Identify Failed Job
         run: |
-          FAILED_JOB=$(jq -r '.jobs | to_entries[] | select(.value.conclusion=="failure") | .key' $GITHUB_EVENT_PATH)
+          FAILED_JOB=$(gh api /repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs | jq -r '.jobs[] | select(.conclusion == "failure") | .name')
           echo "FAILED_JOB=$FAILED_JOB" >> $GITHUB_ENV
           echo "The failed job is: $FAILED_JOB"
-
+        
       - name: Send Email Notification
         uses: dawidd6/action-send-mail@v3
         with:
