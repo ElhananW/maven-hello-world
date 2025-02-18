@@ -140,7 +140,7 @@ jobs:
 
   notify_failure:
     runs-on: ubuntu-latest
-    if: failure() 
+    #if: failure() 
     needs: 
       - build
       - test
