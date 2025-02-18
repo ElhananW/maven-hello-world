@@ -137,16 +137,28 @@ jobs:
     - name: Run Docker container and show logs
       run: |
         docker run --name myapp-container -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/myapp:${{ needs.build.outputs.newVersion }}
+  
+  fail_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: This job is designed to fail
+        run: exit 1  
 
   notify_failure:
     runs-on: ubuntu-latest
-    #if: failure() 
+    if: failure() 
     needs: 
       - build
       - test
       - build_and_publish_docker
       - run_docker_image
     steps:
+      - name: Identify Failed Job
+        run: |
+          FAILED_JOB=$(jq -r '.jobs | to_entries[] | select(.value.conclusion=="failure") | .key' $GITHUB_EVENT_PATH)
+          echo "FAILED_JOB=$FAILED_JOB" >> $GITHUB_ENV
+          echo "The failed job is: $FAILED_JOB"
+
       - name: Send Email Notification
         uses: dawidd6/action-send-mail@v3
         with:
@@ -156,7 +168,7 @@ jobs:
           password: ${{ secrets.SMTP_PASSWORD }} 
           subject: "❌ GitHub Actions Failed in ${{ github.repository }} ❌"
           body: |
-            The workflow failed in one of the jobs.
+            The workflow failed in job: ${{ env.FAILED_JOB }}
             Check the logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           to: ${{ secrets.EMAIL_RECIPIENT }}
           from: GitHub Actions Bot
