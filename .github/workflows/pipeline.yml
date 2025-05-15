@@ -118,8 +118,7 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/myapp:${{ needs.build.outputs.newVersion }} 
-        # platforms: linux/amd64,linux/arm64
-        platforms: linux/amd64
+        platforms: linux/amd64,linux/arm64
 
   run_docker_image:
     runs-on: ubuntu-latest
