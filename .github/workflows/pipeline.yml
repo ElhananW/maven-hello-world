@@ -3,7 +3,7 @@ name: Java Maven CI/CD Pipeline
 on:
   push:
     branches:
-      - master
+      - pipline-setup
     paths-ignore:
       - 'myapp/pom.xml'
 
